@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 
+
 class CarPass(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     brand = models.CharField(max_length=48)
@@ -9,4 +10,3 @@ class CarPass(models.Model):
     owners_name = models.CharField(max_length=96)
     created_ad = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-

@@ -4,17 +4,27 @@ from graphene_django import DjangoObjectType
 from main.serializers import CarPassSerializer
 from .models import CarPass
 
-class ObjectField(Scalar): 
+
+class ObjectField(Scalar):
     @staticmethod
     def serialize(dt):
-        return dt 
-    
+        return dt
+
 
 class CarPassType(DjangoObjectType):
     class Meta:
         model = CarPass
-        fields = ('id', 'uuid', 'brand', 'model', 'plate_number', 'owners_name', 'created_ad', 'updated_at')
-        
+        fields = (
+            "id",
+            "uuid",
+            "brand",
+            "model",
+            "plate_number",
+            "owners_name",
+            "created_ad",
+            "updated_at",
+        )
+
 
 class Query(graphene.ObjectType):
     all_cars = graphene.List(CarPassType)
@@ -22,10 +32,10 @@ class Query(graphene.ObjectType):
 
     def resolve_all_cars(root, info):
         return CarPass.objects.all()
-    
+
     def resolve_car_by_id(root, info, id):
         return CarPass.objects.get(pk=id)
-    
+
 
 class CreateCar(graphene.Mutation):
     car_pass = graphene.Field(CarPassType)
@@ -42,14 +52,14 @@ class CreateCar(graphene.Mutation):
     def mutate(cls, root, info, **kwargs):
         serializer = CarPassSerializer(data=kwargs)
         if serializer.is_valid():
-            obj=serializer.save()
-            msg='success'
+            obj = serializer.save()
+            msg = "success"
             status = 201
         else:
-            msg=serializer.errors
-            obj=None
+            msg = serializer.errors
+            obj = None
             status = 400
-        return cls(car_pass=obj,message=msg,status=status)
+        return cls(car_pass=obj, message=msg, status=status)
 
 
 class UpdateCar(graphene.Mutation):
@@ -69,14 +79,14 @@ class UpdateCar(graphene.Mutation):
         car = CarPass.objects.get(id=id)
         serializer = CarPassSerializer(car, data=kwargs, partial=True)
         if serializer.is_valid():
-            obj=serializer.save()
-            msg='success'
+            obj = serializer.save()
+            msg = "success"
             status = 201
         else:
-            msg=serializer.errors
-            obj=None
+            msg = serializer.errors
+            obj = None
             status = 400
-        return cls(car_pass=obj,message=msg,status=status)
+        return cls(car_pass=obj, message=msg, status=status)
 
 
 class DeleteCar(graphene.Mutation):
@@ -87,10 +97,15 @@ class DeleteCar(graphene.Mutation):
         id = graphene.ID(required=True)
 
     @classmethod
-    def mutate(cls, root, info, id,):
+    def mutate(
+        cls,
+        root,
+        info,
+        id,
+    ):
         car = CarPass.objects.get(id=id)
         car.delete()
-        return cls(message='deleted',status=200)
+        return cls(message="deleted", status=200)
 
 
 class Mutation(graphene.ObjectType):
