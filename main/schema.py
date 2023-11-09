@@ -1,9 +1,6 @@
-from email import message
-from django.db.migrations import serializer
 import graphene
 from graphene.types.scalars import Scalar
 from graphene_django import DjangoObjectType
-from graphene_django.rest_framework.mutation import SerializerMutation
 from main.serializers import CarPassSerializer
 from .models import CarPass
 
@@ -11,11 +8,13 @@ class ObjectField(Scalar):
     @staticmethod
     def serialize(dt):
         return dt 
+    
 
 class CarPassType(DjangoObjectType):
     class Meta:
         model = CarPass
-        fields = ('id', 'uuid', 'brand', 'model', 'plate_number', 'owners_name', 'created_at', 'updated_at')
+        fields = ('id', 'uuid', 'brand', 'model', 'plate_number', 'owners_name', 'created_ad', 'updated_at')
+        
 
 class Query(graphene.ObjectType):
     all_cars = graphene.List(CarPassType)
