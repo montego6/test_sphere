@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 
 class CarPass(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     brand = models.CharField(max_length=48)
     model = models.CharField(max_length=48)
     plate_number = models.CharField(max_length=24)
