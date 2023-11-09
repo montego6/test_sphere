@@ -16,5 +16,10 @@ class Query(graphene.ObjectType):
     
     def resolve_car_by_id(root, info, id):
         return CarPass.objects.get(pk=id)
+    
+
+class CarCreateMutation(graphene.Mutation):
+    
+
 
 schema = graphene.Schema(query=Query)
