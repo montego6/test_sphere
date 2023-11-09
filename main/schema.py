@@ -80,9 +80,24 @@ class UpdateCar(graphene.Mutation):
         return cls(car_pass=obj,message=msg,status=status)
 
 
+class DeleteCar(graphene.Mutation):
+    message = ObjectField()
+    status = graphene.Int()
+
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    @classmethod
+    def mutate(cls, root, info, id,):
+        car = CarPass.objects.get(id=id)
+        car.delete()
+        return cls(message='deleted',status=200)
+
+
 class Mutation(graphene.ObjectType):
     create_car = CreateCar.Field()
     update_car = UpdateCar.Field()
+    delete_car = DeleteCar.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
